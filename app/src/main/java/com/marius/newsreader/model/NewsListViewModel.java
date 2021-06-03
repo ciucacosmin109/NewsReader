@@ -1,18 +1,76 @@
 package com.marius.newsreader.model;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ViewModel;
 
-public class NewsListViewModel extends ViewModel implements LifecycleObserver {
-    @NonNull
-    public ObservableList<ArticleItemViewModel> newsList = new ObservableArrayList<>();
+import com.marius.data.NewsRepository;
+import com.marius.newsreader.model.mapper.ArticlesToVmMapper;
+import com.marius.newsreader.reactive.SingleLiveEvent;
+
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+public class NewsListViewModel extends AndroidViewModel implements LifecycleObserver {
+    private final static String LINK = "https://newsapi.org/";
+
+    private NewsRepository repository;
+
+    public final ObservableList<ArticleItemViewModel> items;
+    public final ObservableBoolean isLoading;
+    public final ObservableField<String> resultText;
+    public final SingleLiveEvent<Throwable> error;
+    public final SingleLiveEvent<String> openLink;
+
+    public NewsListViewModel(Application application, NewsRepository repository) {
+        super(application);
+        this.repository = repository;
+        this.items = new ObservableArrayList<>();
+        this.isLoading = new ObservableBoolean();
+        this.resultText = new ObservableField<>();
+        this.error = new SingleLiveEvent<>();
+        this.openLink = new SingleLiveEvent<>();
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @SuppressLint("CheckResult")
+    public void refresh() {
+        isLoading.set(true);
+        repository.getNewsArticles()
+            .map(new ArticlesToVmMapper())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                this::onNewsArticlesReceived,
+                this::onNewsArticlesError
+            );
+    }
+
+    private void onNewsArticlesReceived(@NonNull List<ArticleItemViewModel> articles) {
+        isLoading.set(false);
+        this.items.addAll(articles);
+        resultText.set("Fetched: " + articles.size());
+    }
+
+    private void onNewsArticlesError(Throwable throwable) {
+        isLoading.set(false);
+        error.setValue(throwable);
+    }
+
+    public void onPoweredBySelected() {
+        openLink.setValue(LINK);
+    }
+
+    /*@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void refresh() {
         newsList.add(new ArticleItemViewModel(
                 "https://images.barrons.com/im-347252?width=1260&size=1.5",
@@ -47,5 +105,5 @@ public class NewsListViewModel extends ViewModel implements LifecycleObserver {
                         "." +
                         "But the company said late Tuesday it had made \"significant progress\" in dealing with the cyberattack and expected the \"vast majority\" of its plants to be operating Wednesday, according to The Associated Press."
         ));
-    }
+    }*/
 }

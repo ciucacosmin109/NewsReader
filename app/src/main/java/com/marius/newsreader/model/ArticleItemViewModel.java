@@ -1,7 +1,5 @@
 package com.marius.newsreader.model;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.ViewModel;
 

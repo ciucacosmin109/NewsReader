@@ -1,10 +1,13 @@
-package com.marius.newsreader.ui.main;
+package com.marius.newsreader.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +15,13 @@ import android.view.ViewGroup;
 
 import com.marius.newsreader.databinding.NewsListFragmentBinding;
 import com.marius.newsreader.model.NewsListViewModel;
+import com.marius.newsreader.model.ViewModelFactory;
+import com.marius.newsreader.navigator.AlertNavigator;
 
 public class NewsListFragment extends Fragment {
 
     private NewsListViewModel mViewModel;
+    private AlertNavigator alertNavigator;
 
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
@@ -24,8 +30,13 @@ public class NewsListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        alertNavigator = new AlertNavigator(getChildFragmentManager(), requireContext());
 
-        mViewModel = new NewsListViewModel();
+        ViewModelFactory factory = new ViewModelFactory(requireActivity().getApplication());
+        mViewModel = new ViewModelProvider(this, factory).get(NewsListViewModel.class);
+
+        mViewModel.error.observe(this, throwable -> alertNavigator.showErrorFor(throwable));
+        mViewModel.openLink.observe(this, link -> openLink(link));
 
         //for those lifecycle callbacks in view model, like ON_CREATE
         getLifecycle().addObserver(mViewModel);
@@ -42,4 +53,9 @@ public class NewsListFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void openLink(@NonNull String link) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(link));
+        startActivity(i);
+    }
 }
