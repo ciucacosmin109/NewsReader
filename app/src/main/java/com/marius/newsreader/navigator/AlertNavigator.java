@@ -5,9 +5,8 @@ import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 
-import com.marius.data.remote.exception.ApiException;
-import com.marius.data.remote.exception.ConnectivityException;
-import com.marius.newsreader.R;
+import com.marius.data.store.remote.exception.ApiException;
+import com.marius.data.store.remote.exception.ConnectivityException;
 
 import io.reactivex.annotations.NonNull;
 

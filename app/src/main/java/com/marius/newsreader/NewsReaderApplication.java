@@ -2,7 +2,7 @@ package com.marius.newsreader;
 
 import android.app.Application;
 
-import com.marius.data.RepositoryModule;
+import com.marius.data.di.RepositoryModule;
 
 public class NewsReaderApplication extends Application {
 
@@ -13,7 +13,7 @@ public class NewsReaderApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        this.repoModule = new RepositoryModule(this);
+        NewsReaderApplication.repoModule = new RepositoryModule(this);
     }
 
     public static RepositoryModule getRepoProvider() {

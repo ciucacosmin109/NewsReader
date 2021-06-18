@@ -6,17 +6,17 @@ import androidx.lifecycle.ViewModel;
 public class ArticleItemViewModel extends ViewModel {
     public final ObservableField<String> imageUrl;
     public final ObservableField<String> title;
-    public final ObservableField<String> content;
+    public final ObservableField<String> description;
 
     public ArticleItemViewModel() {
         imageUrl = new ObservableField<>();
         title = new ObservableField<>();
-        content = new ObservableField<>();
+        description = new ObservableField<>();
     }
 
-    public ArticleItemViewModel(String imageUrl, String title, String content) {
+    public ArticleItemViewModel(String imageUrl, String title, String description) {
         this.imageUrl = new ObservableField<>(imageUrl);
         this.title = new ObservableField<>(title);
-        this.content = new ObservableField<>(content);
+        this.description = new ObservableField<>(description);
     }
 }

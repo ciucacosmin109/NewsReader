@@ -21,7 +21,7 @@ public class ArticlesToVmMapper implements Function<List<Article>, List<ArticleI
 
             viewModelItem.imageUrl.set(dataItem.imageUrl);
             viewModelItem.title.set(dataItem.title);
-            viewModelItem.content.set(dataItem.content);
+            viewModelItem.description.set(dataItem.description);
 
             vmItems.add(viewModelItem);
         }

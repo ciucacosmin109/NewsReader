@@ -8,15 +8,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.marius.data.NewsRepository;
 import com.marius.newsreader.NewsReaderApplication;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ViewModelFactory  implements ViewModelProvider.Factory {
-
     private final Application application;
-
     public ViewModelFactory(Application application) {
         this.application = application;
     }
 
-    @Override
+    @NotNull @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
 
         if (modelClass.isAssignableFrom(NewsListViewModel.class)) {
