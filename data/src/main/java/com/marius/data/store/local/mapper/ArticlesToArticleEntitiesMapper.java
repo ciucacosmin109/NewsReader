@@ -2,8 +2,6 @@ package com.marius.data.store.local.mapper;
 
 import com.marius.data.model.Article;
 import com.marius.data.store.local.ArticleEntity;
-import com.marius.data.store.remote.dto.ArticleDto;
-import com.marius.data.store.remote.dto.ArticleListDto;
 
 import java.util.ArrayList;
 import java.util.List;

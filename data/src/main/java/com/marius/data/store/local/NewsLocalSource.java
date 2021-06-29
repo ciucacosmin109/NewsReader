@@ -26,6 +26,12 @@ public class NewsLocalSource {
                 .map(new ArticleEntitiesToArticlesMapper())
                 .subscribeOn(Schedulers.io());
     }
+    public Single<Article> get(int id) {
+        return dao.get(id)
+                .map(new ArticleEntityToArticleMapper())
+                .subscribeOn(Schedulers.io());
+    }
+    
     public Completable saveAll(List<Article> articles) {
         return dao.insertAll(new ArticlesToArticleEntitiesMapper().apply(articles))
                 .subscribeOn(Schedulers.io());

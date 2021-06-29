@@ -1,4 +1,4 @@
-package com.marius.newsreader.model;
+package com.marius.newsreader.newslist.model;
 
 import android.app.Application;
 
@@ -13,19 +13,23 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import com.marius.data.NewsRepository;
-import com.marius.newsreader.model.mapper.ArticlesToVmMapper;
-import com.marius.newsreader.reactive.SingleLiveEvent;
+import com.marius.newsreader.common.handler.ArticleItemHandler;
+import com.marius.newsreader.newslist.model.mapper.ArticlesToArticleItemsVmMapper;
+import com.marius.newsreader.common.reactive.SingleLiveEvent;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
-public class NewsListViewModel extends AndroidViewModel implements LifecycleObserver {
+public class NewsListViewModel extends AndroidViewModel implements LifecycleObserver, ArticleItemHandler {
     private final static String LINK = "https://newsapi.org/";
 
-    private NewsRepository repository;
+    private final NewsRepository repository;
     private Disposable disposable;
+
+    public PublishSubject<ArticleItemViewModel> events;
 
     public final ObservableList<ArticleItemViewModel> items;
     public final ObservableBoolean isLoading;
@@ -36,6 +40,8 @@ public class NewsListViewModel extends AndroidViewModel implements LifecycleObse
     public NewsListViewModel(Application application, NewsRepository repository) {
         super(application);
         this.repository = repository;
+        this.events = PublishSubject.create();
+
         this.items = new ObservableArrayList<>();
         this.isLoading = new ObservableBoolean();
         this.resultText = new ObservableField<>();
@@ -49,7 +55,7 @@ public class NewsListViewModel extends AndroidViewModel implements LifecycleObse
             isLoading.set(true);
             this.items.clear();
             disposable = repository.getNewsArticles()
-                    .map(new ArticlesToVmMapper())
+                    .map(new ArticlesToArticleItemsVmMapper())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             this::onNewsArticlesReceived,
@@ -57,20 +63,30 @@ public class NewsListViewModel extends AndroidViewModel implements LifecycleObse
                     );
         }
     }
-
     private void onNewsArticlesReceived(@NonNull List<ArticleItemViewModel> articles) {
         isLoading.set(false);
         this.items.addAll(articles);
         resultText.set("Fetched: " + articles.size());
     }
-
     private void onNewsArticlesError(Throwable throwable) {
         isLoading.set(false);
         error.setValue(throwable);
+    }
+
+    @Override
+    public void onItemSelected(ArticleItemViewModel item) {
+        events.onNext(item);
     }
 
     public void onPoweredBySelected() {
         openLink.setValue(LINK);
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if(disposable != null) {
+            disposable.dispose();
+        }
+    }
 }

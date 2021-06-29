@@ -1,4 +1,4 @@
-package com.marius.newsreader.model;
+package com.marius.newsreader.common;
 
 import android.app.Application;
 
@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.marius.data.NewsRepository;
 import com.marius.newsreader.NewsReaderApplication;
+import com.marius.newsreader.articledetails.model.ArticleDetailsViewModel;
+import com.marius.newsreader.newslist.model.NewsListViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +18,16 @@ public class ViewModelFactory  implements ViewModelProvider.Factory {
         this.application = application;
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
+        NewsRepository repo = NewsReaderApplication.getRepoProvider().provideNewsRepository();
 
         if (modelClass.isAssignableFrom(NewsListViewModel.class)) {
-            NewsRepository repo = NewsReaderApplication.getRepoProvider().provideNewsRepository();
             return (T) new NewsListViewModel(application, repo);
+        }
+        if (modelClass.isAssignableFrom(ArticleDetailsViewModel.class)) {
+            return (T) new ArticleDetailsViewModel(repo);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class");

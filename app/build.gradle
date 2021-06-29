@@ -37,6 +37,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$Versions.appcompat"
     implementation "com.google.android.material:material:$Versions.material"
     implementation "androidx.constraintlayout:constraintlayout:$Versions.constraint"
+    implementation "androidx.recyclerview:recyclerview:$Versions.recyclerView"
     implementation "androidx.legacy:legacy-support-v4:$Versions.legacyV4"
 
     // Lifecycle

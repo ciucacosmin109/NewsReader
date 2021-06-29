@@ -1,5 +1,7 @@
 package com.marius.data.store.remote.dto;
 
+import java.util.Date;
+
 public class ArticleDto {
     public final SourceDto source;
     public final String urlToImage;
@@ -8,8 +10,9 @@ public class ArticleDto {
     public final String description;
     public final String title;
     public final String author;
+    public final Date publishedAt;
 
-    public ArticleDto(SourceDto source, String urlToImage, String url, String content, String description, String title, String author) {
+    public ArticleDto(SourceDto source, String urlToImage, String url, String content, String description, String title, String author, Date publishedAt) {
         this.source = source;
         this.urlToImage = urlToImage;
         this.url = url;
@@ -17,5 +20,6 @@ public class ArticleDto {
         this.description = description;
         this.title = title;
         this.author = author;
+        this.publishedAt = publishedAt;
     }
 }

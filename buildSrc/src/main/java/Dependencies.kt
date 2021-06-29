@@ -13,6 +13,7 @@ object Versions {
     const val appcompat = "1.3.0"
     const val material = "1.3.0"
     const val constraint = "1.1.3"
+    const val recyclerView = "1.2.0"
     const val lifecycle = "2.2.0"
     const val legacyV4 = "1.0.0"
     const val glide = "4.11.0"

@@ -1,4 +1,4 @@
-package com.marius.newsreader.view.bindings;
+package com.marius.newsreader.common.view.bindings;
 
 import android.widget.ImageView;
 

@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.marius.newsreader.reactive;
+package com.marius.newsreader.common.reactive;
 
 import android.util.Log;
 

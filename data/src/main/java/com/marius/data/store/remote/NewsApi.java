@@ -9,6 +9,9 @@ import retrofit2.http.Query;
 public interface NewsApi {
 
     @GET("/v2/top-headlines")
-    Single<ArticleListDto> getNewsArticles(@Query("apiKey") String apiKey, @Query("language") String language);
+    Single<ArticleListDto> getNewsArticles(
+            @Query("apiKey") String apiKey,
+            @Query("language") String language
+    );
 
 }

@@ -1,4 +1,4 @@
-package com.marius.newsreader.fragment;
+package com.marius.newsreader.newslist.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marius.newsreader.databinding.NewsListFragmentBinding;
-import com.marius.newsreader.model.NewsListViewModel;
-import com.marius.newsreader.model.ViewModelFactory;
-import com.marius.newsreader.navigator.AlertNavigator;
+import com.marius.newsreader.newslist.model.NewsListViewModel;
+import com.marius.newsreader.common.ViewModelFactory;
+import com.marius.newsreader.common.navigator.AlertNavigator;
 
 public class NewsListFragment extends Fragment {
 
@@ -28,15 +28,15 @@ public class NewsListFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         alertNavigator = new AlertNavigator(getChildFragmentManager(), requireContext());
 
         ViewModelFactory factory = new ViewModelFactory(requireActivity().getApplication());
-        mViewModel = new ViewModelProvider(this, factory).get(NewsListViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity(), factory).get(NewsListViewModel.class);
 
-        mViewModel.error.observe(this, throwable -> alertNavigator.showErrorFor(throwable));
-        mViewModel.openLink.observe(this, link -> openLink(link));
+        mViewModel.error.observe(this, alertNavigator::showErrorFor);
+        mViewModel.openLink.observe(this, this::openLink);
 
         //for those lifecycle callbacks in view model, like ON_CREATE
         getLifecycle().addObserver(mViewModel);
@@ -47,7 +47,6 @@ public class NewsListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         NewsListFragmentBinding binding = NewsListFragmentBinding.inflate(inflater, container, false);
-
         binding.setViewModel(mViewModel);
 
         return binding.getRoot();

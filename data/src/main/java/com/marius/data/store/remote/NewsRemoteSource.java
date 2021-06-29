@@ -1,8 +1,7 @@
 package com.marius.data.store.remote;
 
 import com.marius.data.model.Article;
-import com.marius.data.store.remote.dto.ArticleListDto;
-import com.marius.data.store.remote.mapper.NewsDtoToNewsMapper;
+import com.marius.data.store.remote.mapper.ArticleListDtoToArticlesMapper;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class NewsRemoteSource {
     public Single<List<Article>> getNewsArticles() {
         return newsApi
                 .getNewsArticles(API_KEY, EN_LANGUAGE_FILTER)
-                .map(new NewsDtoToNewsMapper())
+                .map(new ArticleListDtoToArticlesMapper())
                 .subscribeOn(Schedulers.io());
     }
 }
