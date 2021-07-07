@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion AppConfig.compileSdk
+    buildToolsVersion AppConfig.buildTools
+
+    defaultConfig {
+        minSdkVersion AppConfig.minSdk
+        targetSdkVersion AppConfig.targetSdk
+        versionCode AppConfig.versionCode
+        versionName AppConfig.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:$Versions.appcompat"
+
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxandroid:$Versions.rxAndroid"
+    implementation "io.reactivex.rxjava2:rxjava:$Versions.rxJava"
+
+    // Http client
+    implementation "com.squareup.okhttp3:okhttp:$Versions.okHttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$Versions.okHttp"
+
+    // REST library
+    implementation "com.squareup.retrofit2:retrofit:$Versions.retrofit2"
+    implementation "com.squareup.retrofit2:converter-gson:$Versions.retrofit2"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$Versions.retrofit2"
+
+    // Room
+    implementation "androidx.room:room-runtime:$Versions.room"
+    implementation "androidx.room:room-rxjava2:$Versions.room"
+    annotationProcessor "androidx.room:room-compiler:$Versions.room"
+    testImplementation "androidx.room:room-testing:$Versions.room"
+
+    // Testing
+    testImplementation "junit:junit:$Versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$Versions.junitTest"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$Versions.espresso"
+
+}
